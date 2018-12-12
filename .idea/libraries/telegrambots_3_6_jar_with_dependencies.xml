@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="telegrambots-3.6-jar-with-dependencies">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-3.6-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-abilities-3.6-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-abilities-3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-meta-3.6-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambots-meta-3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambotsextensions-3.6-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../libraries/telegram/telegrambotsextensions-3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="com.julienvey.trello:trello-java-wrapper:0.3.2" type="repository">
+    <properties maven-id="com.julienvey.trello:trello-java-wrapper:0.3.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/julienvey/trello/trello-java-wrapper/0.3.2/trello-java-wrapper-0.3.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.2.0/jackson-core-2.2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.2.0/jackson-databind-2.2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.2.0/jackson-annotations-2.2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.0.11/logback-core-1.0.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.0.11/logback-classic-1.0.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
