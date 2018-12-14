@@ -1,5 +1,6 @@
 package commands;
 
+import com.julienvey.trello.domain.Board;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.domain.TList;
 import org.telegram.telegrambots.api.objects.Message;
@@ -10,20 +11,26 @@ import java.util.List;
 
 public class CardCommand {
     public List<Card> cards = new ArrayList<>();
+    public TList list;
 
     @Deprecated
-    public void fretch (Message message, Bot bot, TList list){
-        cards.addAll(list.getCards());
+    public void fretch (Message message, Bot bot, List<Card> cards){
+        this.cards = cards;
         List<String> cardsname = new ArrayList<>();
-        String text = cards.toString() + ".";
         for (int i = 0; i < cards.size(); i++) {
             cardsname.add(cards.get(i).getName());
-            text = cards.get(i).getName();
         }
-        bot.sendMsg(message,text, cardsname);
+        cardsname.add("Add Card");
+        bot.sendMsg(message,"Done", cardsname);
     }
 
-    public List<Card> init(){
-        return this.cards;
+    public List<Card> init(TList list){
+        List<Card> cards = new ArrayList<>();
+        cards.addAll(list.getCards());
+        return cards;
+    }
+
+    public TList getList() {
+        return list;
     }
 }

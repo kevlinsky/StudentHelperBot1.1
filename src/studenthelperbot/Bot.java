@@ -34,6 +34,15 @@ public class Bot extends TelegramLongPollingBot {
     public List<TList> lists = new ArrayList<>();
     public List<Card> cards = new ArrayList<>();
 
+    public StartCommand startCommand = new StartCommand();
+    public ListCommand listCommand = new ListCommand();
+    public CardCommand cardCommand = new CardCommand();
+    public Abilities abilities = new Abilities();
+
+    public Board currentBoard;
+    public TList currentList;
+    public Card currentCard;
+
     public static void main(String[] args) {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
@@ -52,16 +61,34 @@ public class Bot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setSelective(true); //Доступ клавиатуры разным пользователям
         replyKeyboardMarkup.setResizeKeyboard(true); //Автоматическая подгонка кнопок
         replyKeyboardMarkup.setOneTimeKeyboard(false); //Клавиатура будет скрываться когда бот отвечает на сообщение
-        //Создание строк кнопок
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        //Добавление кнопок в строку
-        for (int i = 0; i < buttonsname.size(); i++) {
-            keyboardFirstRow.add(buttonsname.get(i));
+        //Добавление строк и кнопок в них
+        List<KeyboardRow> rows = new ArrayList<>();
+        int n = buttonsname.size();
+        if (n % 3 != 0) {
+            for (int i = 0; i < (n / 3 + 1); i++) {
+                rows.add(new KeyboardRow());
+            }
+            int i = 0;
+            int count = 0;
+            while (i != n){
+                rows.get(count).add(buttonsname.get(i));
+                i++;
+                if (i % 3 == 0){count++;}
+            }
+        } else {
+            for (int i = 0; i < n / 3; i++) {
+                rows.add(new KeyboardRow());
+            }
+            int i = 0;
+            int count = 0;
+            while (i != n){
+                rows.get(count).add(buttonsname.get(i));
+                i++;
+                if (i % 3 == 0){count++;}
+            }
         }
         //Добавление строк в список строк
-        keyboardRowList.add(keyboardFirstRow);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+        replyKeyboardMarkup.setKeyboard(rows);
     }
 
     @Deprecated
@@ -96,13 +123,12 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message != null && message.hasText()){
+        if (message != null && message.hasText()) {
 
             //Cовпадение с командой /start
-            if (message.getText().equals("/start")){
-                StartCommand start = new StartCommand();
-                start.fretch(message, this, this.boardId, this.trelloApi);
-                this.boards = start.init();
+            if (message.getText().equals("/start")) {
+                this.boards = this.startCommand.init(this.boardId, this.trelloApi);
+                this.startCommand.fretch(message, this, this.boards);
             }
             //Совпадения со стандартными командами
             for (int i = 0; i < commands.length; i++) {
@@ -112,27 +138,50 @@ public class Bot extends TelegramLongPollingBot {
             }
             //Совпадения с именами досок
             for (int j = 0; j < boards.size(); j++) {
-                if(boards.get(j).getName().equals(message.getText())){
-                    ListCommand lists = new ListCommand();
-                    lists.fretch(message, this, this.boards.get(j));
-                    this.lists = lists.init();
+                if (boards.get(j).getName().equals(message.getText())) {
+                    this.currentBoard = boards.get(j);
+                    this.lists = this.listCommand.init(this.currentBoard);
+                    this.listCommand.fretch(message, this, this.lists);
                 }
             }
             //Совпадения с именами списков
             for (int j = 0; j < lists.size(); j++) {
-                if(lists.get(j).getName().equals(message.getText())){
-                    CardCommand cards = new CardCommand();
-                    cards.fretch(message, this, lists.get(j));
-                    this.cards = cards.init();
+                if (lists.get(j).getName().equals(message.getText())) {
+                    this.currentList = lists.get(j);
+                    this.cards = cardCommand.init(this.currentList);
+                    this.cardCommand.fretch(message, this, this.cards);
+
                 }
             }
 
             //Совпадения с именами карточек
             for (int j = 0; j < cards.size(); j++) {
-                if(cards.get(j).getName().equals(message.getText())){
-                    System.out.println("Well Done!");
+                if (cards.get(j).getName().equals(message.getText())) {
+                    this.currentCard = cards.get(j);
+                    abilities.fretch(message, this);
                 }
             }
+            if (message.getText().equals("Add Board") && boards.size() != 0) {
+                new NameCommand().execute(message, this);
+                String name = "Test Board";
+                Board nb = new Board();
+                nb.setName(name);
+                this.boards.add(nb);
+                startCommand.fretch(message, this, this.boards);
+            }
+            if (message.getText().equals("Add List") && lists.size() != 0) {
+                new NameCommand().execute(message, this);
+                String name = message.getText();
+                TList nl = new TList();
+                nl.setName(name);
+                this.lists.add(nl);
+                listCommand.fretch(message, this, this.lists);
+                listCommand.addList(nl);
+            }
+            if (message.getText().equals("Add Card") && cards.size() != 0) {}
+            if (message.getText().equals("Change Board Name")) {}
+            if (message.getText().equals("Change List Name")) {}
+            if (message.getText().equals("Change Card Name")) {}
         }
     }
 
